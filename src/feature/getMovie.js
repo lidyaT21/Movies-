@@ -5,6 +5,11 @@ export const getMovies = {
   random: (amount) => fetchRandomMovies(amount),
 };
 
+/**
+ * Fetch movies based on a search term.
+ * @param {string} search - The movie name to search for.
+ * @returns {Promise<Object[]>} - A promise resolving to an array of movie results.
+ */
 const fetchMoviesByName = async (search) => {
   try {
     showSpinner();
@@ -24,7 +29,11 @@ const fetchMoviesByName = async (search) => {
     hideSpinner();
   }
 };
-
+/**
+ * Fetch a specific movie by its ID.
+ * @param {number} id - The ID of the movie.
+ * @returns {Promise<Object>} - A promise resolving to the movie details.
+ */
 const fetchMovieById = async (id) => {
   try {
     showSpinner();
@@ -45,6 +54,11 @@ const fetchMovieById = async (id) => {
   }
 };
 
+/**
+ * Fetch a set amount of random popular movies.
+ * @param {number} amount - The number of movies to fetch.
+ * @returns {Promise<Object[]>} - A promise resolving to an array of random movies.
+ */
 const fetchRandomMovies = async (amount) => {
   try {
     showSpinner();

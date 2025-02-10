@@ -4,7 +4,9 @@ export const createResultElement = (movies) => {
   const element = document.createElement("div");
   element.classList.add(constants.CARD_CLASS);
 
-  // Create anchor tag linking to movie details
+  // Create card body
+  const cardBody = document.createElement("div");
+  cardBody.classList.add(constants.CARD_BODY_CLASS);
 
   // Create image element
   const img = document.createElement("img");
@@ -13,10 +15,6 @@ export const createResultElement = (movies) => {
   img.src = movies.poster_path
     ? `https://image.tmdb.org/t/p/w500${movies.poster_path}`
     : "../images/no-image.jpg";
-
-  // Create card body
-  const cardBody = document.createElement("div");
-  cardBody.classList.add(constants.CARD_BODY_CLASS);
 
   // Create title
   const title = document.createElement("h5");
@@ -31,10 +29,10 @@ export const createResultElement = (movies) => {
   small.textContent = `Release: ${movies.release_date}`;
   releaseDate.appendChild(small);
 
-  // Create Read More button
+  // Create view More button
   const button = document.createElement("button");
-  button.classList.add(constants.READ_MORE_BUTTON_CLASS);
-  button.textContent = "Read More";
+  button.classList.add(constants.VIEW_MORE_BUTTON_CLASS);
+  button.textContent = "view More";
 
   // Append elements together
   cardBody.appendChild(title);

@@ -21,17 +21,13 @@ export const constants = {
 
   TOP_DETAILS_CLASS: "details-top",
   BOTTOM_DETAILS_CLASS: "details-bottom",
-  RESULT_TITLE_CLASS: "result-title",
-  RESULT_INSTRUCTIONS_CLASS: "result-instructions",
-  RESULT_IMAGE_CLASS: "result-image",
   BUTTON_CLASS: "btn",
   BACK_CLASS: "back",
   HIDE_CLASS: "hide",
   BACK_BUTTON_CLASS: "btn",
-  READ_MORE_BUTTON_CLASS: "read-more-btn",
+  VIEW_MORE_BUTTON_CLASS: "view-more-btn",
   SPINNER: "spinner",
   // API
-  // Register your key at https://www.themoviedb.org/settings/api and enter here
 
   API_KEY: "9c37f856ea60850163c210717dbe62f2",
   API_URL: "https://api.themoviedb.org/3",

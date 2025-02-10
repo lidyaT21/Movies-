@@ -7,47 +7,43 @@ import { constants } from "../constants.js";
 import { createMovieElement } from "../view/movieDetailView.js";
 import { createResultElement } from "../view/resultView.js";
 
+// Initialize the page and load UI elements
 export const initPage = async () => {
   const userInterface = document.getElementById(constants.USER_INTERFACE_ID);
-  // Clear the user interface
   userInterface.innerHTML = "";
-  if (document.getElementById(constants.ERROR_ELEMENT_ID)) {
-    document.getElementById(constants.ERROR_ELEMENT_ID).remove();
-  }
 
-  userInterface.appendChild(createWelcomeElement());
-  userInterface.appendChild(createSearchElement());
+  // Remove any existing error messages
+  const errorElement = document.getElementById(constants.ERROR_ELEMENT_ID);
+  if (errorElement) errorElement.remove();
+
+  // Append welcome and search elements
+  userInterface.append(createWelcomeElement(), createSearchElement());
 
   const results = createResultsElement();
   userInterface.appendChild(results);
-  PopularMovies(document.getElementById(constants.RESULTS_ID));
+
+  // Load popular movies and set up event listeners
+  loadPopularMovies(document.getElementById(constants.RESULTS_ID));
   document
     .getElementById(constants.SEARCH_FORM_ID)
     .addEventListener("submit", searchMoviesHandler);
-
   document
     .getElementById(constants.SEARCH_BUTTON_ID)
     .addEventListener("click", searchMoviesHandler);
 };
 
-// popullar Movies
-const PopularMovies = async (results) => {
+// Fetch and display popular movies
+const loadPopularMovies = async (results) => {
   try {
     results.innerHTML = "";
-
     const movies = await getMovies.random(12);
-    console.log(movies);
     movies.forEach((movie) => {
       const movieElement = createResultElement(movie);
-      if (movieElement) {
-        results.appendChild(movieElement);
-      }
+      if (movieElement) results.appendChild(movieElement);
     });
-    console.log(movies);
-
-    readMoreButtonEventListener();
+    attachReadMoreListeners();
   } catch (error) {
-    if (results.childNodes.length === 0) {
+    if (!results.hasChildNodes()) {
       results.parentNode.appendChild(
         createErrorElement("Failed to load popular movies. Try again.")
       );
@@ -55,36 +51,31 @@ const PopularMovies = async (results) => {
   }
 };
 
+// Handle search form submission
 const searchMoviesHandler = () => {
   searchMovies(document.getElementById(constants.RESULTS_ID));
 };
+
+// Fetch and display searched movies
 const searchMovies = async (results) => {
-  const popular = document.querySelector("." + constants.POPULAR_MOVIE_CLASS);
-  if (popular) {
-    popular.remove();
-  }
+  // Remove popular movies section if present
+  document.querySelector("." + constants.POPULAR_MOVIE_CLASS)?.remove();
   try {
     const searchInput = document.getElementById(constants.SEARCH_INPUT_ID);
     const searchValue = searchInput.value.trim();
-
     results.innerHTML = "";
 
     // Remove existing error messages
-    const existingError = results.parentNode.querySelector(".error-message");
-    if (existingError) existingError.remove();
+    results.parentNode.querySelector(".error-message")?.remove();
 
-    if (searchValue === "") {
+    if (!searchValue) {
       results.parentNode.appendChild(
         createErrorElement("Please enter a movie name and try again.")
       );
       return;
     }
-    console.log(results.parentNode);
-    console.log("Search value:", searchValue);
 
     const movies = await getMovies.byName(searchValue);
-    console.log("Fetched movies:", movies);
-
     if (!movies || movies.length === 0) {
       results.parentNode.appendChild(
         createErrorElement("No movies found. Try again.")
@@ -92,16 +83,13 @@ const searchMovies = async (results) => {
       return;
     }
 
-    // Append results to the DOM
+    // Append search results to the DOM
     movies.forEach((result) => {
       const movieElement = createResultElement(result);
-
-      if (movieElement) {
-        results.appendChild(movieElement);
-      }
+      if (movieElement) results.appendChild(movieElement);
     });
 
-    readMoreButtonEventListener();
+    attachReadMoreListeners();
   } catch (error) {
     results.parentNode.appendChild(
       createErrorElement("API error, please try again.")
@@ -109,47 +97,52 @@ const searchMovies = async (results) => {
     console.error("Search error:", error);
   }
 };
-const readMoreButtonEventListener = () => {
+
+// Attach event listeners to "Read More" buttons
+const attachReadMoreListeners = () => {
   document
-    .querySelectorAll("." + constants.READ_MORE_BUTTON_CLASS)
+    .querySelectorAll("." + constants.VIEW_MORE_BUTTON_CLASS)
     .forEach((button) => {
-      button.addEventListener("click", function (event) {
-        showMovieHandler(event.target.parentNode.parentNode.id);
-      });
+      button.addEventListener("click", (event) =>
+        showMovieHandler(event.target.closest("[id]").id)
+      );
     });
 };
 
+// Fetch and display movie details when "Read More" is clicked
 const showMovieHandler = async (id) => {
   const movie = await getMovies.byId(id);
-  showMovie(movie);
-  displayBackgroundImage(movie.backdrop_path);
+  displayMovie(movie);
+  setBackgroundImage(movie.backdrop_path);
 };
 
-const showMovie = (movie) => {
-  const movieElement = createMovieElement(movie);
+// Display the selected movie details
+const displayMovie = (movie) => {
   const userInterface = document.getElementById(constants.USER_INTERFACE_ID);
-  // Clear the user interface
   userInterface.innerHTML = "";
-  document
-    .getElementById(constants.USER_INTERFACE_ID)
-    .appendChild(movieElement);
+  userInterface.appendChild(createMovieElement(movie));
+
+  // Attach event listener to "Back" button
   document
     .querySelector("." + constants.BACK_BUTTON_CLASS)
     .addEventListener("click", initPage);
 };
 
-const displayBackgroundImage = (backgroundPath) => {
+// Set the background image for the movie details page
+const setBackgroundImage = (backgroundPath) => {
   const overlayDiv = document.createElement("div");
-  overlayDiv.style.backgroundImage = `url(https://image.tmdb.org/t/p/original/${backgroundPath})`;
-  overlayDiv.style.backgroundSize = "cover";
-  overlayDiv.style.backgroundPosition = "center";
-  overlayDiv.style.backgroundRepeat = "no-repeat";
-  overlayDiv.style.height = "100vh";
-  overlayDiv.style.width = "100vw";
-  overlayDiv.style.position = "absolute";
-  overlayDiv.style.top = "0";
-  overlayDiv.style.left = "0";
-  overlayDiv.style.zIndex = "-1";
-  overlayDiv.style.opacity = "0.1";
+  Object.assign(overlayDiv.style, {
+    backgroundImage: `url(https://image.tmdb.org/t/p/original/${backgroundPath})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    height: "100vh",
+    width: "100vw",
+    position: "absolute",
+    top: "0",
+    left: "0",
+    zIndex: "-1",
+    opacity: "0.1",
+  });
   document.getElementById(constants.MOVIE_DETAILS_ID).prepend(overlayDiv);
 };
