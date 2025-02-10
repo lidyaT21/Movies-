@@ -29,3 +29,28 @@ export const initPage = async () => {
     .getElementById(constants.SEARCH_BUTTON_ID)
     .addEventListener("click", searchMoviesHandler);
 };
+
+// popullar Movies
+const PopularMovies = async (results) => {
+  try {
+    results.innerHTML = "";
+
+    const movies = await getMovies.random(12);
+    console.log(movies);
+    movies.forEach((movie) => {
+      const movieElement = createResultElement(movie);
+      if (movieElement) {
+        results.appendChild(movieElement);
+      }
+    });
+    console.log(movies);
+
+    readMoreButtonEventListener();
+  } catch (error) {
+    if (results.childNodes.length === 0) {
+      results.parentNode.appendChild(
+        createErrorElement("Failed to load popular movies. Try again.")
+      );
+    }
+  }
+};
