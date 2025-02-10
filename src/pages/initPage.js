@@ -109,3 +109,31 @@ const searchMovies = async (results) => {
     console.error("Search error:", error);
   }
 };
+const readMoreButtonEventListener = () => {
+  document
+    .querySelectorAll("." + constants.READ_MORE_BUTTON_CLASS)
+    .forEach((button) => {
+      button.addEventListener("click", function (event) {
+        showMovieHandler(event.target.parentNode.parentNode.id);
+      });
+    });
+};
+
+const showMovieHandler = async (id) => {
+  const movie = await getMovies.byId(id);
+  showMovie(movie);
+  displayBackgroundImage(movie.backdrop_path);
+};
+
+const showMovie = (movie) => {
+  const movieElement = createMovieElement(movie);
+  const userInterface = document.getElementById(constants.USER_INTERFACE_ID);
+  // Clear the user interface
+  userInterface.innerHTML = "";
+  document
+    .getElementById(constants.USER_INTERFACE_ID)
+    .appendChild(movieElement);
+  document
+    .querySelector("." + constants.BACK_BUTTON_CLASS)
+    .addEventListener("click", initPage);
+};
