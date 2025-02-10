@@ -54,3 +54,58 @@ const PopularMovies = async (results) => {
     }
   }
 };
+
+const searchMoviesHandler = () => {
+  searchMovies(document.getElementById(constants.RESULTS_ID));
+};
+const searchMovies = async (results) => {
+  const popular = document.querySelector("." + constants.POPULAR_MOVIE_CLASS);
+  if (popular) {
+    popular.remove();
+  }
+  try {
+    const searchInput = document.getElementById(constants.SEARCH_INPUT_ID);
+    const searchValue = searchInput.value.trim();
+
+    results.innerHTML = "";
+
+    // Remove existing error messages
+    const existingError = results.parentNode.querySelector(".error-message");
+    if (existingError) existingError.remove();
+
+    if (searchValue === "") {
+      results.parentNode.appendChild(
+        createErrorElement("Please enter a movie name and try again.")
+      );
+      return;
+    }
+    console.log(results.parentNode);
+    console.log("Search value:", searchValue);
+
+    const movies = await getMovies.byName(searchValue);
+    console.log("Fetched movies:", movies);
+
+    if (!movies || movies.length === 0) {
+      results.parentNode.appendChild(
+        createErrorElement("No movies found. Try again.")
+      );
+      return;
+    }
+
+    // Append results to the DOM
+    movies.forEach((result) => {
+      const movieElement = createResultElement(result);
+
+      if (movieElement) {
+        results.appendChild(movieElement);
+      }
+    });
+
+    readMoreButtonEventListener();
+  } catch (error) {
+    results.parentNode.appendChild(
+      createErrorElement("API error, please try again.")
+    );
+    console.error("Search error:", error);
+  }
+};
