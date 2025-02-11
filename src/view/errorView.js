@@ -6,7 +6,7 @@ import { constants } from "../constants.js";
  * @param {boolean} isButton - Whether to include a "Go home" button.
  * @returns {HTMLElement} - The error element.
  */
-export const createErrorElement = (error, isButton = false) => {
+export const createErrorElement = (error) => {
   const errorElement = document.createElement("h2");
   errorElement.innerText = error;
   errorElement.id = constants.ERROR_ELEMENT_ID;
