@@ -36,7 +36,7 @@ export const initPage = async () => {
 const loadPopularMovies = async (results) => {
   try {
     results.innerHTML = "";
-    const movies = await getMovies.random(12);
+    const movies = await getMovies.random();
     movies.forEach((movie) => {
       const movieElement = createResultElement(movie);
       if (movieElement) results.appendChild(movieElement);

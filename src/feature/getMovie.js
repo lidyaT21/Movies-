@@ -2,7 +2,7 @@ import { constants } from "../constants.js";
 export const getMovies = {
   byName: (search) => fetchMoviesByName(search),
   byId: (id) => fetchMovieById(id),
-  random: (amount) => fetchRandomMovies(amount),
+  random: () => fetchRandomMovies(),
 };
 
 /**
@@ -21,6 +21,7 @@ const fetchMoviesByName = async (search) => {
       throw new Error(`Error ${response.status}: Movie not found`);
     }
     const data = await response.json();
+    console.log(data.results);
     await new Promise((resolve) => setTimeout(resolve, 1500));
     hideSpinner();
     return data.results;
@@ -41,8 +42,11 @@ const fetchMovieById = async (id) => {
     console.log(url);
 
     const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: Movie not found`);
+    }
     const data = await response.json();
-
+    console.log(data);
     // Delay hiding the spinner
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
@@ -59,18 +63,19 @@ const fetchMovieById = async (id) => {
  * @param {number} amount - The number of movies to fetch.
  * @returns {Promise<Object[]>} - A promise resolving to an array of random movies.
  */
-const fetchRandomMovies = async (amount) => {
+const fetchRandomMovies = async () => {
   try {
     showSpinner();
-    const popularUrl = `${constants.API_URL}/movie/popular?api_key=${constants.API_KEY}&page=1`;
+    const randomPage = Math.floor(Math.random() * 5) + 1; // Fetch a random page (1-5)
+    const popularUrl = `${constants.API_URL}/movie/popular?api_key=${constants.API_KEY}&page=${randomPage}`;
     const response = await fetch(popularUrl);
     if (!response.ok) {
       throw new Error(`Error ${response.status}: Movie not found`);
     }
     const data = await response.json();
-    const movies = data.results
-      .sort(() => 0.5 - Math.random())
-      .slice(0, amount);
+    const movies = data.results.sort(() => Math.random() - 0.5); // Shuffle results
+
+    console.log(`Fetching from page: ${randomPage}`, data, movies);
     await new Promise((resolve) => setTimeout(resolve, 1500));
     hideSpinner();
     return movies;
@@ -79,7 +84,6 @@ const fetchRandomMovies = async (amount) => {
     hideSpinner();
   }
 };
-
 const showSpinner = () => {
   document.querySelector("." + constants.SPINNER).classList.add("show");
 };

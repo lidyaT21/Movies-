@@ -4,10 +4,7 @@ export const constants = {
   SEARCH_FORM_ID: "search-form",
   SEARCH_INPUT_ID: "search-input",
   RESULTS_ID: "results",
-  //MOVIE_ID: "movie",
   MOVIE_DETAILS_ID: "movie-details",
-  LOADING_ID: "loading",
-  HOME_BUTTON_ID: "home-button",
   ERROR_ELEMENT_ID: "error-element",
   // Classes
   CONTAINER_CLASS: "container",
