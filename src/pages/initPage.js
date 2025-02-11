@@ -66,7 +66,9 @@ const searchMovies = async (results) => {
     results.innerHTML = "";
 
     // Remove existing error messages
-    results.parentNode.querySelector(".error-message")?.remove();
+    results.parentNode
+      .querySelector("." + constants.ERROR_MESSAGE_CLASS)
+      ?.remove();
 
     if (!searchValue) {
       results.parentNode.appendChild(

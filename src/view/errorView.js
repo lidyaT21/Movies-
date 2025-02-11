@@ -10,7 +10,7 @@ export const createErrorElement = (error) => {
   const errorElement = document.createElement("h2");
   errorElement.innerText = error;
   errorElement.id = constants.ERROR_ELEMENT_ID;
-  errorElement.classList.add("error-message"); // Add a class for potential styling
+  errorElement.classList.add(constants.ERROR_MESSAGE_CLASS);
 
   return errorElement;
 };

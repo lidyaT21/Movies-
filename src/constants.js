@@ -15,6 +15,7 @@ export const constants = {
   CARD_BODY_CLASS: "card-body",
   CARD_TITLE_CLASS: "card-title",
   CARD_BODY_CLASS: "card-text",
+  ERROR_MESSAGE_CLASS: "error-message",
 
   TOP_DETAILS_CLASS: "details-top",
   BOTTOM_DETAILS_CLASS: "details-bottom",
