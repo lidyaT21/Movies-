@@ -29,6 +29,7 @@ export function createMovieElement(result) {
   imageDiv.appendChild(image);
 
   const movieInfo = document.createElement("div");
+  movieInfo.classList.add(constants.MOVIE_INFO_CLASS);
   movieInfo.innerHTML = `
     <h2>${result.title}</h2>
     <p><i class="fas fa-star text-primary"></i> ${result.vote_average.toFixed(

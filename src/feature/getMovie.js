@@ -21,7 +21,6 @@ const fetchMoviesByName = async (search) => {
       throw new Error(`Error ${response.status}: Movie not found`);
     }
     const data = await response.json();
-    console.log(data.results);
     await new Promise((resolve) => setTimeout(resolve, 1500));
     hideSpinner();
     return data.results;
@@ -39,17 +38,14 @@ const fetchMovieById = async (id) => {
   try {
     showSpinner();
     const url = `${constants.API_URL}/movie/${id}?api_key=${constants.API_KEY}`;
-    console.log(url);
-
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Error ${response.status}: Movie not found`);
     }
     const data = await response.json();
-    console.log(data);
+
     // Delay hiding the spinner
     await new Promise((resolve) => setTimeout(resolve, 1500));
-
     hideSpinner();
     return data;
   } catch (error) {
@@ -66,7 +62,6 @@ const fetchMovieById = async (id) => {
 const fetchRandomMovies = async () => {
   try {
     showSpinner();
-
     const popularUrl = `${constants.API_URL}/movie/popular?api_key=${constants.API_KEY}&page=1`;
     const response = await fetch(popularUrl);
     if (!response.ok) {
@@ -74,8 +69,6 @@ const fetchRandomMovies = async () => {
     }
     const data = await response.json();
     const movies = data.results.sort(() => Math.random() - 0.5); // Shuffle results
-
-    console.log(`Fetching from page: `, data, movies);
     await new Promise((resolve) => setTimeout(resolve, 1500));
     hideSpinner();
     return movies;

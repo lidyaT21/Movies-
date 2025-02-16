@@ -115,6 +115,9 @@ ul {
   margin: 0 auto;
   padding: 0 20px;
 }
+.movie-info {
+  padding: 0 20px;
+}
 
 .details-top {
   display: flex;

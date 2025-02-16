@@ -78,6 +78,7 @@ const searchMovies = async (results) => {
     }
 
     const movies = await getMovies.byName(searchValue);
+    console.log(movies, movies.length);
     if (!movies || movies.length === 0) {
       results.parentNode.appendChild(
         createErrorElement("No movies found. Try again.")
